@@ -34,7 +34,7 @@ function createIndividualPromises() {
         if (scrapingRound === 2) {
             for (i = ListRestaurants.length / 2; i < ListRestaurants.length; i++) {
                 let restaurantURL = ListRestaurants[i].url;
-                ListPromisesIndiv.push(fillRestaurantInfo(restaurantURL, i));
+                ListIndivPromises.push(fillRestaurantInfo(restaurantURL, i));
                 console.log("Added url of " + i + "th restaurant to the promises list");
             }
             resolve();
@@ -114,7 +114,7 @@ function saveRestaurantsInJson() {
             console.log("Trying to write the restaurant's JSON file");
             var jsonRestaurants = JSON.stringify(ListRestaurants);
 
-            fs.writeFile("RestaurantMichelin.json", jsonRestaurants, function doneWriting(err) {
+            fs.writeFile("RestaurantsMichelin.json", jsonRestaurants, function doneWriting(err) {
                 if (err) { console.error(err); }
             });
         }
@@ -136,5 +136,5 @@ Promise.all(ListPromises)
     .then(() => { console.log("You successfuly saved restaurants JSON file") });
 
 module.exports.getRestaurantsJSON = function () {
-    return JSON.parse(fs.readFileSync("RestaurantMichelin.json"));
+    return JSON.parse(fs.readFileSync("RestaurantsMichelin.json"));
 };
