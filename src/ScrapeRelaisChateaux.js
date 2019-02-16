@@ -10,7 +10,7 @@ let ListIndivPromises = [];
 
 
 let ListHotels = [];
-let scrapingRound = 1;
+let compteur = 1;
 
 //Creating promises
 function createPromise() {

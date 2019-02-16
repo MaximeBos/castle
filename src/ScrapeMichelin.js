@@ -109,7 +109,7 @@ function fillRestaurantInfo(url, index) {
 
 //Saving the file as RestaurantsMichelin.json
 function saveRestaurantsInJson() {
-    return new Promise(resolve => {
+    return new Promise(function (resolve) {
         try {
             console.log("Trying to write the restaurant's JSON file");
             var jsonRestaurants = JSON.stringify(ListRestaurants);
