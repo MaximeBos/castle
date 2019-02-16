@@ -4,21 +4,21 @@ let request = require('request');
 let cheerio = require('cheerio');
 let fs = require('fs');
 
-//List of promises
 let ListPromises = [];
 let ListIndivPromises = [];
-
 let ListRestaurants = [];
 let scrapingRound = 1;
 
+
 //Creation of promises
 function createPromises() {
-    for (i = 1; i <= 37; i++) { //list of 35 results
+    for (i = 1; i <= 37; i++) { //list of 35 pages to check
         let url = 'https://restaurant.michelin.fr/restaurants/france/restaurants-1-etoile-michelin/restaurants-2-etoiles-michelin/restaurants-3-etoiles-michelin/page-' + i.toString();
         ListPromises.push(fillRestaurantsList(url));
         console.log("Page " + i + " of starred Michelin restaurants added to the list");
     }
 }
+
 
 function createIndividualPromises() {
     return new Promise(function (resolve) {
@@ -47,7 +47,7 @@ function fillRestaurantsList(url) {
     return new Promise(function (resolve, reject) {
         request(url, function (err, res, html) {
             if (err) {
-                console.error(err);
+                console.log(err);
                 return reject(err);
             }
             else if (res.statusCode !== 200) {
@@ -56,12 +56,12 @@ function fillRestaurantsList(url) {
                 console.error(err);
                 return reject(err);
             }
-            let $ = cheerio.load(html);
+            var $ = cheerio.load(html);
             $('.poi-card-link').each(function () {
                 let data = $(this);
                 let link = data.attr("href");
                 let url = "https://restaurant.michelin.fr/" + link;
-                restaurantsList.push({ "name": "", "postalCode": "", "chef": "", "url": url })
+                ListRestaurants.push({ "name": "", "postalCode": "", "chef": "", "url": url })
             });
             resolve(ListRestaurants);
         });
@@ -96,8 +96,7 @@ function fillRestaurantInfo(url, index) {
                 let pc = data.text();
                 ListRestaurants[index].postalCode = pc;
             });
-
-            $('#node_poi-menu-wrapper > div.node_poi-chef > div.node_poi_description > div.field.field--name-field-chef.field--type-text.field--label-above > div.field__items > div').first().each(function () {
+            $('#node_poi-menu-wrapper > div.node_poi-chef > div > div > div.field__items > div').first().each(function () {
                 let data = $(this);
                 let chefname = data.text();
                 ListRestaurants[index].chef = chefname;
@@ -110,11 +109,12 @@ function fillRestaurantInfo(url, index) {
 
 //Saving the file as RestaurantsMichelin.json
 function saveRestaurantsInJson() {
-    return new Promise(function (resolve) {
+    return new Promise(resolve => {
         try {
             console.log("Trying to write the restaurant's JSON file");
-            let jsonRestaurants = JSON.stringify(ListRestaurants);
-            fs.writeFile("RestaurantsMichelin.json", jsonRestaurants, function doneWriting(err) {
+            var jsonRestaurants = JSON.stringify(ListRestaurants);
+
+            fs.writeFile("RestaurantMichelin.json", jsonRestaurants, function doneWriting(err) {
                 if (err) { console.error(err); }
             });
         }
@@ -136,5 +136,5 @@ Promise.all(ListPromises)
     .then(() => { console.log("You successfuly saved restaurants JSON file") });
 
 module.exports.getRestaurantsJSON = function () {
-    return JSON.parse(fs.readFileSync("RestaurantsMichelin.json"));
+    return JSON.parse(fs.readFileSync("RestaurantMichelin.json"));
 };

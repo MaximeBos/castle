@@ -21,20 +21,20 @@ function createPromise() {
 
 function createIndividualPromises() {
     return new Promise(function (resolve) {
-        if (scrapingRound === 1) {
+        if (compteur === 1) {
             for (let i = 0; i < Math.trunc(ListHotels.length / 2); i++) {
                 let hotelURL = ListHotels[i].url;
                 ListIndivPromises.push(fillHotelInfo(hotelURL, i));
-                console.log("Added url of " + i + "th hotel to the promises list");
+                console.log("Added url of " + i + "th hotel to the list");
             }
             resolve();
-            scrapingRound++;
+            compteur++;
         }
-        else if (scrapingRound === 2) {
+        else if (compteur === 2) {
             for (let i = ListHotels.length / 2; i < Math.trunc(ListHotels.length); i++) {
                 let hotelURL = ListHotels[i].url;
                 ListIndivPromises.push(fillHotelInfo(hotelURL, i));
-                console.log("Added url of " + i + "th hotel to the promises list");
+                console.log("Added url of " + i + "th hotel to the list");
             }
             resolve();
         }
@@ -105,13 +105,13 @@ function fillHotelInfo(url, index) {
     });
 }
 
-//Saving the file as ListeRelais.json
+//Saving the file as ListeRelaisChateaux.json
 function saveHotelsInJson() {
     return new Promise(function (resolve) {
         try {
             console.log("Editing JSON file");
             let jsonHotels = JSON.stringify(ListHotels);
-            fs.writeFile("ListeRelaisChateau.json", jsonHotels, function doneWriting(err) {
+            fs.writeFile("ListeRelaisChateaux.json", jsonHotels, function doneWriting(err) {
                 if (err) { console.log(err); }
             });
         }
@@ -135,5 +135,5 @@ prom
     .then(() => { console.log("JSON file ok") });
 
 module.exports.getHotelsJSON = function () {
-    return JSON.parse(fs.readFileSync("ListeRelaisChateau.json"));
+    return JSON.parse(fs.readFileSync("ListeRelaisChateaux.json"));
 };
