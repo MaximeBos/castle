@@ -82,7 +82,6 @@ function fillRestaurantInfo(url, index) {
                 console.error(err);
                 return reject(err);
             }
-
             const $ = cheerio.load(html);
             $('.poi_intro-display-title').first().each(function () {
                 let data = $(this);
@@ -125,6 +124,8 @@ function saveRestaurantsInJson() {
     });
 }
 
+
+
 //Main()
 createPromises();
 Promise.all(ListPromises)
@@ -137,4 +138,5 @@ Promise.all(ListPromises)
 
 module.exports.getRestaurantsJSON = function () {
     return JSON.parse(fs.readFileSync("RestaurantsMichelin.json"));
+
 };
