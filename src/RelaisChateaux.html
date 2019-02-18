@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Relais & Chateaux</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="table">
+        <h1 class="display-1">List of Relais & Chateaux</h1>
+        <br>
+        <br>
+        <input type="text" name="prix" id="p" value="Enter un prix" />
+        <button class="btn btn-success btn-lg" id="lecture">Get the list</button>
+        <br>
+        <table class="table table-bordered table-info table-active border-bottom" id="result_table">
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Hotel</th>
+                <th>Restaurant</th>
+                <th>Postal Code</th>
+                <th>Chef</th>
+                <th>Price</th>
+                <th>URL</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function() {
+    $('#lecture').on('click', function(){
+        $.getJSON("RelaisEtoiles.json", function(result){
+            var items = [];
+            $.each(result, function(key, val){
+                items.push("<tr>");
+                items.push("<td id = ''"+key+"''>"+(key+1)+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.hotelName+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.restaurantName+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.postalCode+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.chef+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.price+"</td>");
+                items.push("<td id = ''"+key+"''>"+val.url+"</td>");
+                items.push("</tr>");
+            });
+            $("<tbody/>", {html:items.join("")}).appendTo("table");
+        });
+    });
+});
+</script>
